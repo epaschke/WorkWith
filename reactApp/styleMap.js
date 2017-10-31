@@ -1,11 +1,48 @@
-const fontSize = require('./app.js')
-console.log('fontSize: ', fontSize);
 export const styleMap = {
   'STRIKETHROUGH': {
     textDecoration: 'line-through',
   },
-  fontSize: {
-    fontSize: fontSize
+  leftJustify: {
+    textDecoration: {
+      textAlign: 'left'
+    }
+  },
+  rightJustify: {
+    textDecoration: {
+      textAlign: 'right'
+    }
+  },
+  centerJustify: {
+    textDecoration: {
+      textAlign: 'center'
+    }
+  },
+  fontSize12: {
+    fontSize: '12'
+  },
+  fontSize24: {
+    fontSize: '24'
+  },
+  fontSize36: {
+    fontSize: '36'
+  },
+  fontSize48: {
+    fontSize: '48'
+  },
+  fontSize60: {
+    fontSize: '60'
+  },
+  fontSize72: {
+    fontSize: '72'
+  },
+  fontSize84: {
+    fontSize: '84'
+  },
+  fontSize96: {
+    fontSize: '96'
+  },
+  fontSize108: {
+    fontSize: '108'
   },
   textRed: {
     color: 'rgba(255, 0, 0, 1.0)'
