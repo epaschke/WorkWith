@@ -2,21 +2,6 @@ export const styleMap = {
   'STRIKETHROUGH': {
     textDecoration: 'line-through',
   },
-  leftJustify: {
-    textDecoration: {
-      textAlign: 'left'
-    }
-  },
-  rightJustify: {
-    textDecoration: {
-      textAlign: 'right'
-    }
-  },
-  centerJustify: {
-    textDecoration: {
-      textAlign: 'center'
-    }
-  },
   fontSize12: {
     fontSize: '12'
   },

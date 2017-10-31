@@ -6,3 +6,15 @@
 li {
   list-style-type: disc !important;
 }*/
+
+.centerAlign div {
+    text-align: center;
+}
+
+.leftAlign div {
+    text-align: left;
+}
+
+.rightAlign div {
+    text-align: right;
+}

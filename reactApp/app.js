@@ -68,44 +68,46 @@ class MyEditor extends React.Component {
     this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, `background${color}`));
   }
   _onStrikethroughClick(){
-      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
   }
+
   _onSizeSelect(){
     let size = document.getElementById('slider1').value;
     this.setState({
       size
-    })
+    });
+
     switch (parseInt(this.state.size)) {
-      case 12:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize12'));
-        break;
-      case 24:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize24'));
-        break;
-      case 36:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize36'));
-        break;
-      case 48:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize48'));
-        break;
-      case 60:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize60'));
-        break;
-      case 72:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize72'));
-        break;
-      case 84:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize84'));
-        break;
-      case 96:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize96'));
-        break;
-      case 108:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize108'));
-        break;
-      default:
-        this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize24'));
-        break;
+    case 12:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize12'));
+      break;
+    case 24:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize24'));
+      break;
+    case 36:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize36'));
+      break;
+    case 48:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize48'));
+      break;
+    case 60:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize60'));
+      break;
+    case 72:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize72'));
+      break;
+    case 84:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize84'));
+      break;
+    case 96:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize96'));
+      break;
+    case 108:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize108'));
+      break;
+    default:
+      this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'fontSize24'));
+      break;
     }
   }
 
@@ -124,34 +126,39 @@ class MyEditor extends React.Component {
       'ordered-list-item'));
   }
 
-  _onLeftJustify(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'ordered-list-item'));
+  _onLeftAlign(styleName){
+      this.onChange(RichUtils.toggleBlockType(
+        this.state.editorState,
+        'leftAlign'));
   }
 
-  _onLeftJustify(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'ordered-list-item'));
+  _onRightAlign(styleName){
+      this.onChange(RichUtils.toggleBlockType(
+        this.state.editorState,
+        'rightAlign'));
   }
 
-  _onLeftJustify(){
-    this.onChange(RichUtils.toggleBlockType(
-      this.state.editorState,
-      'ordered-list-item'));
+  _onCenterAlign(styleName){
+      this.onChange(RichUtils.toggleBlockType(
+        this.state.editorState,
+        'centerAlign'));
   }
 
   myBlockStyleFn(contentBlock) {
-  const type = contentBlock.getType();
-  if (type === 'leftJustify') {
-    return this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'leftJustify'));
-  }  else if(type === 'rightJustify'){
-    return this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'rightJustify'));
-  }  else {
-    return this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'centerJustify'));
+    const type = contentBlock.getType();
+    console.log('contentBlock: ', contentBlock);
+    console.log('type: ', type);
+    switch (type) {
+    case 'leftAlign':
+      return 'leftAlign';
+    case 'rightAlign':
+      return 'rightAlign';
+    case 'centerAlign':
+      return 'centerAlign';
+    default:
+      return 'leftAlign';
+    }
   }
-}
 
   render() {
     return (
@@ -195,16 +202,16 @@ class MyEditor extends React.Component {
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onBoldClick.bind(this)}><i className="material-icons">format_bold</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onItalicClick.bind(this)}><i className="material-icons">format_italic</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onUnderLineClick.bind(this)}><i className="material-icons">format_underlined</i></a>
-                 <a className="waves-effect waves-teal btn-flat" onClick={this.myBlockStyleFn.bind(this)}><i className="material-icons">format_align_left</i></a>
-                 <a className="waves-effect waves-teal btn-flat" onClick={this.myBlockStyleFn.bind(this)}><i className="material-icons">format_align_center</i></a>
-                 <a className="waves-effect waves-teal btn-flat" onClick={this.myBlockStyleFn.bind(this)}><i className="material-icons">format_align_right</i></a>
+                 <a className="waves-effect waves-teal btn-flat" onClick={this._onLeftAlign.bind(this)}><i className="material-icons">format_align_left</i></a>
+                 <a className="waves-effect waves-teal btn-flat" onClick={this._onCenterAlign.bind(this)}><i className="material-icons">format_align_center</i></a>
+                 <a className="waves-effect waves-teal btn-flat" onClick={this._onRightAlign.bind(this)}><i className="material-icons">format_align_right</i></a>
                  {/* doesn't work because of materialize css padding <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={this._onBulletedClick.bind(this)}>format_list_bulleted</i></a> */}
                  <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={this._onOrderedClick.bind(this)}>format_list_numbered</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onStrikethroughClick.bind(this)}><i className="material-icons">format_strikethrough</i></a>
              </div>
          </div>
             <div style={{border: "1px solid gray", minHeight: 300, margin: 20}}>
-                <Editor blockStyleFn={() => this.myBlockStyleFn.bind(this)} customStyleMap={styleMap} editorState={this.state.editorState} handleKeyCommand={this.handleKeyCommand} onChange={this.onChange}/>
+                <Editor blockStyleFn={this.myBlockStyleFn} customStyleMap={styleMap} editorState={this.state.editorState} handleKeyCommand={this.handleKeyCommand} onChange={this.onChange}/>
             </div>
         </div>
     );
