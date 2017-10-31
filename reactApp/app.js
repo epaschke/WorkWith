@@ -67,6 +67,42 @@ class MyEditor extends React.Component {
     color = colorArr.join('');
     this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, `background${color}`));
   }
+
+  _onFontStyleSelect(){
+    var font = document.getElementById('fontStyleSelect').value;
+    console.log('font: ', font);
+    switch (font) {
+      case 'monospace':
+        this._onMonospace();
+        break;
+      case 'times new roman':
+        this._onTimes();
+        break;
+      case 'cambria':
+        this._onMonospace();
+        break;
+      default:
+        break;
+
+    }
+  }
+
+  _onMonospace(){
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'monospace'));
+  }
+
+  _onTimes(){
+    var font = document.getElementById('fontStyleSelect').value;
+    console.log('font: ', font);
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'times'));
+  }
+
+  _onCambria(){
+    var font = document.getElementById('fontStyleSelect').value;
+    console.log('font: ', font);
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'cambria'));
+  }
+
   _onStrikethroughClick(){
     this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'STRIKETHROUGH'));
   }
@@ -126,19 +162,19 @@ class MyEditor extends React.Component {
       'ordered-list-item'));
   }
 
-  _onLeftAlign(styleName){
+  _onLeftAlign(){
       this.onChange(RichUtils.toggleBlockType(
         this.state.editorState,
         'leftAlign'));
   }
 
-  _onRightAlign(styleName){
+  _onRightAlign(){
       this.onChange(RichUtils.toggleBlockType(
         this.state.editorState,
         'rightAlign'));
   }
 
-  _onCenterAlign(styleName){
+  _onCenterAlign(){
       this.onChange(RichUtils.toggleBlockType(
         this.state.editorState,
         'centerAlign'));
@@ -171,15 +207,11 @@ class MyEditor extends React.Component {
                       Size: {this.state.size}
                     </div>
                   </div>
-                 <select className='dropdown-button btn' href='#' style={{margin: 5}}>
+                 <select id='fontStyleSelect' className='dropdown-button btn' href='#' style={{margin: 5}} onChange={this._onFontStyleSelect.bind(this)}>
                    <option>-font-</option>
-                   <option>Cambria</option>
-                   <option>Arial</option>
-                   <option>Ayuthaya</option>
-                   <option>Marker Felt</option>
-                   <option>Lucida Fax</option>
-                   <option>Avenir Black</option>
-                   <option>Beirut</option>
+                   <option value="cambria">Cambria</option>
+                   <option value="monospace">Monospace</option>
+                   <option value="times new roman">Times New Roman</option>
                 </select>
 
                <select id='colorSelect' className='dropdown-button btn' href='#' style={{margin: 5}} onChange={this._onColorSelect.bind(this)}>
@@ -205,13 +237,13 @@ class MyEditor extends React.Component {
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onLeftAlign.bind(this)}><i className="material-icons">format_align_left</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onCenterAlign.bind(this)}><i className="material-icons">format_align_center</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onRightAlign.bind(this)}><i className="material-icons">format_align_right</i></a>
-                 <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={this._onBulletedClick.bind(this)}>format_list_bulleted</i></a> 
+                 <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={this._onBulletedClick.bind(this)}>format_list_bulleted</i></a>
                  <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={this._onOrderedClick.bind(this)}>format_list_numbered</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={this._onStrikethroughClick.bind(this)}><i className="material-icons">format_strikethrough</i></a>
              </div>
          </div>
             <div style={{border: "1px solid gray", minHeight: 300, margin: 20}}>
-                <Editor blockStyleFn={this.myBlockStyleFn} customStyleMap={styleMap} editorState={this.state.editorState} handleKeyCommand={this.handleKeyCommand} onChange={this.onChange}/>
+                <Editor spellCheck={true} blockStyleFn={this.myBlockStyleFn} customStyleMap={styleMap} editorState={this.state.editorState} handleKeyCommand={this.handleKeyCommand} onChange={this.onChange}/>
             </div>
         </div>
     );
