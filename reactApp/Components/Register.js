@@ -2,7 +2,7 @@ var React = require('react');
 var { Link } = require('react-router-dom');
 var axios = require('axios');
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -23,42 +23,42 @@ class Login extends React.Component {
     });
   }
 
-  login(){
+  register(){
     console.log('this.state: ', this.state);
-    axios.post('http://localhost:3000/login', {
+    axios.post('http://localhost:3000/register', {
       username: this.state.username,
       password: this.state.password
     })
     .then((response) => {
       if (response.data.success){
-        this.props.history.push('/home');
+        this.props.history.push('/login');
       }
     })
     .catch(function(error){
         console.log('Error', error);
     });
-  }
 
+  }
   render(){
     return (<div>
-        <h2>Login Page</h2>
+        <h2>Register Page</h2>
         <p>path: {this.props.location.pathname}</p>
         <div className="row">
-            <form className="col s12" action="http://localhost:3000/login" method="POST" id="form1">
+            <form className="col s12">
                     <div className="input-field col s6">
                       <input placeholder="username" name="username" type="text" className="validate" onChange={(e) => this.usernameChange(e)} value={this.state.username}/>
                     </div>
                     <div className="input-field col s6">
-                      <input name="password" placeholder="password" type="password" className="validate" onChange={(e) => this.passwordChange(e)} value={this.state.password}/>
+                      <input name="password" placeholder="password" type="password" onChange={(e) => this.passwordChange(e)} value={this.state.password} className="validate"/>
                     </div>
                     <div className="input-field col s6">
-                      <input type="button" onClick={() => this.login()}/>
+                      <input type="button" onClick={() => this.register()}/>
                     </div>
                 </form>
         </div>
-        <Link to="/register">Register</Link>
+        <Link to="/login">Link to login</Link>
     </div>);
   }
 }
 
-module.exports = {Login};
+module.exports = { Register };

@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-export const DocumentSchema = new Schema({
+const DocumentSchema = new Schema({
   author: {
     required: true,
     type: String
@@ -14,4 +14,6 @@ export const DocumentSchema = new Schema({
     required: true,
     type: Array
   },
-})
+});
+
+module.exports = mongoose.model('Document', DocumentSchema);
