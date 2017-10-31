@@ -2,6 +2,15 @@ export const styleMap = {
   'STRIKETHROUGH': {
     textDecoration: 'line-through',
   },
+  monospace: {
+    fontFamily: '"Inconsolata", "Menlo", "Consolas", "monospace" ',
+  },
+  times: {
+    fontFamily: '"Times New Roman", "Times", "serif"',
+  },
+  cambria: {
+    fontFamily: '"Cambria", "Georgia", "serif"',
+  },
   leftJustify: {
     textDecoration: {
       textAlign: 'left'
