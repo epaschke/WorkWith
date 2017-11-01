@@ -40,7 +40,7 @@ class DocContainer extends React.Component {
       console.log(error);
     });
   }
-
+  
   save(){
     console.log('converttoraw:', convertToRaw(this.state.editorState.getCurrentContent()));
     console.log('editorState state: ', this.state.editorState);
@@ -58,7 +58,6 @@ class DocContainer extends React.Component {
       console.log(error);
     })
   }
-
   render(){
     return (
             <div>
