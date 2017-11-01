@@ -20,7 +20,6 @@ class Home extends React.Component {
 
   createDoc(e){
     e.preventDefault();
-
     axios.post('http://localhost:3000/newDocument', {
       title: this.state.title,
     })
