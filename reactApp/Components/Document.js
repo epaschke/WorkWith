@@ -29,7 +29,6 @@ class DocContainer extends React.Component {
 
       this.setState({
         title: response.data.title,
-        id: response.data._id,
         loading: false
       })
     }.bind(this))
@@ -54,7 +53,7 @@ class Static extends React.Component {
             <div style={{display: "flex", justifyContent: 'space-around', alignItems: 'center'}}>
                 <a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">keyboard_return</i></a>
                 <div><h3>{!this.props.loading && <b>{this.props.title}</b>}</h3>
-                <p>ID: {this.props.id}</p></div>
+                <p>ID: {this.props.docId}</p></div>
                 <a className="btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">save</i></a>
             </div>
     );

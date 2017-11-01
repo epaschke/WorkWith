@@ -43,14 +43,6 @@ app.get('/', function (req, res) {
   res.render('Text');
 });
 
-app.get('/home', function(req, res){
-  res.status(200).send({"success": true});
-});
-
-app.get('/login', function(req, res) {
-  res.status(400).json({"success": false, "error": "Invalid username or password"});
-})
-
 app.post('/login', passport.authenticate('local'), function (req, res) {
   if (!req.user) {
     res.status(400).json({"success": false, "error": "Invalid username or password"});
