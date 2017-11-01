@@ -14,9 +14,8 @@ const DocumentSchema = new Schema({
   collaborators: {
     type: Array
   },
-  editorState: {
-    type: Object,
-    default: {}
+  editorRaw: {
+    type: String
   }
 });
 

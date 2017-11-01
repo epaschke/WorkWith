@@ -43,7 +43,7 @@ class Login extends React.Component {
         <h2>Login Page</h2>
         {/* <p>path: {this.props.location.pathname}</p> */}
         <div className="row">
-            <form className="col s12" action="http://localhost:3000/login" method="POST" id="form1">
+            <form className="col s12" id="form1">
                     <div className="input-field col s6">
                       <input placeholder="username" name="username" type="text" className="validate" onChange={(e) => this.usernameChange(e)} value={this.state.username}/>
                     </div>
