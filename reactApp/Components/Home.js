@@ -38,7 +38,6 @@ class Home extends React.Component {
     // axios request
     axios.get('http://localhost:3000/documents')
     .then(function (response) {
-      console.log('response: ', response);
       this.setState({
         documents: response.data
       })
@@ -75,7 +74,7 @@ class Home extends React.Component {
       </div>
     <ul>
       {this.state.documents.map((doc) => {
-        return <li>
+        return <li key={doc._id}>
           <Link to={{pathname: `/document/${doc._id}`}}>{doc.title} </Link>
         </li>
       })}
