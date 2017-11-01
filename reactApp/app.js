@@ -16,7 +16,7 @@ class App extends React.Component {
                     <Route path="/register" component={Register}/>
                     <Route path="/login" component={Login} />
                     <Route path="/home" component={Home} />
-                    <Route path="/document" component={DocContainer} />
+                    <Route path="/document/:docId" component={DocContainer} />
                 </Switch>
             </div>
         </BrowserRouter>
