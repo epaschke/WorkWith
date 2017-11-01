@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var User = require('./user');
+
 const DocumentSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
@@ -13,6 +13,10 @@ const DocumentSchema = new Schema({
   },
   collaborators: {
     type: Array
+  },
+  editorState: {
+    type: Object,
+    default: {}
   }
 });
 

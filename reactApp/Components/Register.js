@@ -8,8 +8,8 @@ class Register extends React.Component {
     this.state = {
       username: '',
       password: ''
-        }
-    }
+    };
+  }
   passwordChange(e){
     console.log('e password', e.target.value);
     this.setState({
@@ -32,10 +32,12 @@ class Register extends React.Component {
     .then((response) => {
       if (response.data.success){
         this.props.history.push('/login');
+      } else {
+        console.log(response.data.error);
       }
     })
     .catch(function(error){
-        console.log('Error', error);
+      console.log('Error', error);
     });
 
   }
