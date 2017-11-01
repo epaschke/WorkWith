@@ -1,7 +1,8 @@
 var React = require('react');
 var { Editor, EditorState, RichUtils } = require('draft-js');
 const {styleMap} = require('../styleMap');
-console.log('styleMap: ', styleMap);
+var { Link } = require('react-router-dom');
+var axios = require('axios');
 /* This can check if your electron app can communicate with your backend */
 // fetch('http://localhost:3000')
 // .then(resp => resp.text())
@@ -12,21 +13,44 @@ class DocContainer extends React.Component {
   render(){
     return (
             <div>
-                <Static docName="Doc" docId="34344"/>
-                <MyEditor/>
+                <MyEditor />
             </div>
     );
   }
 }
 
 class Static extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      docName: props.docName,
+      showEdit: false
+    }
+  }
+
+  componentDidMount(){
+    console.log(this.props.docName)
+  }
+
+  editDocName(e){
+    this.setState({
+      docName: e.target.value
+    })
+  }
+
   render(){
     return (
             <div style={{display: "flex", justifyContent: 'space-around', alignItems: 'center'}}>
-                <a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">keyboard_return</i></a>
-                <div><h3><b>{this.props.docName}</b></h3>
+                <Link to="/home" className="btn-floating btn-large waves-effect waves-light red">
+                  <i className="material-icons">keyboard_return</i>
+                </Link>
+                <div>{this.state.showEdit ? <input onChange={(e) => this.editDocName(e)} value={this.state.docName}/> : <h3 onClick={() => this.setState({showEdit: true})}><b>{this.state.docName}</b></h3>}
+                    {this.state.showEdit ? <button onClick={() => {this.props.changeDocName(this.state.docName); this.setState({showEdit: false})}}>Save</button> : null}
                 <p>ID: {this.props.docId}</p></div>
-                <a className="btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">save</i></a>
+                <a className="btn-floating btn-large waves-effect waves-light blue"
+                    onClick={() => this.props.saveFn()}>
+                  <i className="material-icons">save</i>
+                </a>
             </div>
     );
   }
@@ -35,7 +59,7 @@ class Static extends React.Component {
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {editorState: EditorState.createEmpty(), size: 12};
+    this.state = {editorState: EditorState.createEmpty(), size: 12, docName: props.docName || 'Untitled'};
     this.onChange = (editorState) => this.setState({editorState});
   }
 
@@ -195,9 +219,37 @@ class MyEditor extends React.Component {
     }
   }
 
+  save(){
+    axios.post('http://localhost:3000/save', {
+      docId: '59f9184af2fa902a5faa9c52',
+      docName: this.state.docName
+    })
+    .then((response) => {
+      if (response.data.success) {
+        console.log('saved document!');
+        console.log('editorState type: ', typeof EditorState);
+        console.log('this.state editorState: ', typeof this.state.editorState);
+        console.log('this.state editorState content: ', this.state.editorState);
+      } else {
+        console.log('error saving document: ', response.data.error);
+      }
+    })
+    .catch((error) =>
+      console.log('error: ', error)
+    );
+  }
+
+  changeDocName(docName){
+    this.setState({
+      docName
+    });
+    console.log(this.state.docName);
+  }
+
   render() {
     return (
         <div>
+          <Static changeDocName={(name) => this.changeDocName(name)} docId="34344" saveFn={this.save.bind(this)} docName={this.state.docName}/>
             <div>
                 <div style={{display: 'flex'}}>
                   <div style={{flex: 1}}>

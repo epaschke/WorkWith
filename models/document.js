@@ -11,9 +11,9 @@ const DocumentSchema = new Schema({
     type: String
   },
   collaborators: {
-    required: true,
     type: Array
-  },
+  }
 });
+
 
 module.exports = mongoose.model('Document', DocumentSchema);

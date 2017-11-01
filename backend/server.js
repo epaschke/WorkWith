@@ -3,6 +3,7 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+const Document = require('../models/Document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
@@ -48,7 +49,20 @@ app.get('/home', function(req, res){
 
 app.get('login', function(req, res){
   res.status(400).json({"success": false, "error": "Invalid username or password"});
-})
+});
+
+app.post('/save', function(req, res){
+  Document.findById(req.body.docId, function(error, result){
+    result.title = req.body.docName;
+    return result.save()
+  })
+  .then(() =>
+    res.status(200).json({"success": true})
+  )
+  .catch((error) =>{
+    res.status(500).json({"success": false, "error": error})
+  });
+});
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/home',
