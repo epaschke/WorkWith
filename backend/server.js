@@ -88,7 +88,6 @@ app.post('/save', function(req, res){
 });
 
 app.get('/documents', function(req, res){
-  console.log('req.user: ', req.user)
   Document.find({}).
   populate('author').
   exec(function(err, documents){
@@ -100,7 +99,6 @@ app.get('/documents', function(req, res){
         documents = [];
       } else {
         documents = documents.filter(function(document){
-          console.log('document: ', document)
           if(document.author.username === req.user.username || (document.collaborators.indexOf(req.user) > -1)){
             console.log(document);
             return true;
@@ -115,14 +113,20 @@ app.get('/documents', function(req, res){
 })
 
 app.get('/document/:id', function(req, res){
+  console.log('id: ', req.params.id);
   Document.findById(req.params.id, function(err, doc){
-    if(err){
+    if(err || !doc){
       console.log('document not found!');
       res.status(500).json({"success": false, "error": "Error finding document"});
     }  else {
-      console.log("found doc:", doc)
-      console.log('found doc keys:', doc.keys)
-      res.status(200).json(doc);
+      doc.collaborators.push(req.user);
+      doc.save(function(err){
+        if(err){
+          console.log('error saving doc.');
+        }  else{
+          res.status(200).json(doc);
+        }
+      })
     }
   })
 });

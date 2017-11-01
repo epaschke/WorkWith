@@ -23,7 +23,8 @@ class Register extends React.Component {
     });
   }
 
-  register(){
+  register(e){
+    e.preventDefault();
     console.log('this.state: ', this.state);
     axios.post('http://localhost:3000/register', {
       username: this.state.username,
@@ -53,7 +54,9 @@ class Register extends React.Component {
                       <input name="password" placeholder="password" type="password" onChange={(e) => this.passwordChange(e)} value={this.state.password} className="validate"/>
                     </div>
                     <div className="input-field col s6">
-                      <input type="button" onClick={() => this.register()}/>
+                      <button onClick={(e) => this.register(e)} className="waves-effect waves-light btn">
+                        <i className="material-icons right">near_me</i> Register
+                        </button>
                     </div>
                 </form>
         </div>

@@ -40,8 +40,6 @@ class DocContainer extends React.Component {
     });
   }
 
-
-
   render(){
     return (
             <div>

@@ -8,6 +8,7 @@ class Home extends React.Component {
     this.state = {
       title: '',
       documents: [],
+      id: '',
     }
   }
 
@@ -18,6 +19,28 @@ class Home extends React.Component {
     });
   }
 
+  idChange(e){
+    console.log('id: ', e.target.value);
+    this.setState({
+      id: e.target.value,
+    });
+  }
+
+  findDoc(e){
+    e.preventDefault();
+    axios.get(`http://localhost:3000/document/${this.state.id}`)
+    .then(function (response) {
+      console.log('got response: ', response.data)
+      this.setState({
+        documents: [...this.state.documents, response.data],
+        id: ''
+      })
+    }.bind(this))
+    .catch(function (error) {
+      console.log('error: ', error);
+    });
+  }
+
   createDoc(e){
     e.preventDefault();
     axios.post('http://localhost:3000/newDocument', {
@@ -25,7 +48,8 @@ class Home extends React.Component {
     })
     .then((res) => {
       this.setState({
-        documents: [...this.state.documents, res.data.doc]
+        documents: [...this.state.documents, res.data.doc],
+        title: ''
       })
     })
     .catch(function(error){
@@ -78,6 +102,16 @@ class Home extends React.Component {
         </li>
       })}
     </ul>
+    </div>
+    <div className="row">
+      <form className="col s12">
+        <div className="input-field col s6" style={{border: '1px solid black', display: 'flex', alignItems: 'center'}}>
+          <input placeholder="Enter id.." name="docName" type="text" className="validate" onChange={(e) => this.idChange(e)} value={this.state.id}/>
+          <button className="btn-small waves-effect waves-light blue" type="submit" name="action" onClick={(e) => this.findDoc(e)}>Find
+            <i className="material-icons right">send</i>
+          </button>
+        </div>
+      </form>
     </div>
   </div>);
 }
