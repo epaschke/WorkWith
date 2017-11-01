@@ -1,6 +1,7 @@
 var React = require('react');
 var { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } = require('draft-js');
-const {styleMap} = require('../styleMap');
+var { Link } = require('react-router-dom');
+const { styleMap } = require('../styleMap');
 console.log('styleMap: ', styleMap);
 var axios = require('axios');
 
@@ -28,23 +29,40 @@ class DocContainer extends React.Component {
     console.log('this.state:', this.state);
     axios.get('http://localhost:3000/document/' + this.state.id)
     .then(function (response) {
-      console.log('got response: ', response.data)
-        this.setState({
-          title: response.data.title,
-          loading: false
-      })
-      console.log('set state here')
+      console.log('got response: ', response.data);
+      this.setState({
+        title: response.data.title,
+        editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(response.data.editorRaw))),
+        loading: false
+      });
     }.bind(this))
     .catch(function (error) {
       console.log(error);
     });
   }
-
+  
+  save(){
+    console.log('converttoraw:', convertToRaw(this.state.editorState.getCurrentContent()));
+    console.log('editorState state: ', this.state.editorState);
+    axios.post('http://localhost:3000/save',
+    { docId: this.state.id, title: this.state.title, editorState: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())) })
+    .then(function(response){
+      console.log('got response from save: ', response);
+      if (response.data.success){
+        console.log('saved');
+      } else {
+        console.log('error saving');
+      }
+    })
+    .catch(function(error){
+      console.log(error);
+    })
+  }
   render(){
     return (
             <div>
-                <Static loading={this.state.loading} docId={this.state.id} title={this.state.title}/>
-                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange}/>
+                <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} saveFn={this.save.bind(this)} />
+                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} />
             </div>
     );
   }
@@ -54,10 +72,15 @@ class Static extends React.Component {
   render(){
     return (
             <div style={{display: "flex", justifyContent: 'space-around', alignItems: 'center'}}>
-                <a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">keyboard_return</i></a>
+                <Link to="/home" className="btn-floating btn-large waves-effect waves-light red">
+                  <i className="material-icons">keyboard_return</i>
+                </Link>
                 <div><h3>{!this.props.loading && <b>{this.props.title}</b>}</h3>
                 <p>ID: {this.props.docId}</p></div>
-                <a className="btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">save</i></a>
+                <a className="btn-floating btn-large waves-effect waves-light blue"
+                   onClick={this.props.saveFn}>
+                  <i className="material-icons">save</i>
+                </a>
             </div>
     );
   }

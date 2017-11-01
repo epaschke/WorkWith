@@ -3,7 +3,7 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-const Document = require('../models/Document');
+const Document = require('../models/document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
@@ -61,7 +61,7 @@ app.post('/newDocument', function(req, res){
       console.log('error: ', error);
       res.status(500).json({"success": false, "error": "Error saving document"});
     } else {
-      req.user.documents.push(newDocument);
+      req.user.documents.push(nd);
       req.user.save(function(err){
         if(err){
           console.log('error saving req.user.');
@@ -75,19 +75,29 @@ app.post('/newDocument', function(req, res){
 })
 
 app.post('/save', function(req, res){
+  //console.log('save req:', req.body);
   Document.findById(req.body.docId, function(error, result){
-    result.title = req.body.docName;
-    return result.save()
-  })
-  .then(() =>
-    res.status(200).json({"success": true})
-  )
-  .catch((error) =>{
-    res.status(500).json({"success": false, "error": error})
+    if (error || !result){
+      res.status(500).json({"success": false, "error": error});
+    } else {
+      //console.log('result found save:', result);
+      result.title = req.body.title;
+      result.editorRaw = req.body.editorState;
+      result.save(function(error, result2){
+        if (error){
+          console.log('error saving: ', error);
+          res.status(500).json({"success": false, "error": error});
+        } else {
+          console.log('post-save: ', result2);
+          res.status(200).json({"success": true});
+        }
+      });
+    }
   });
 });
 
 app.get('/documents', function(req, res){
+
   Document.find({}).
   populate('author').
   exec(function(err, documents){
@@ -105,12 +115,12 @@ app.get('/documents', function(req, res){
           } else {
             return false;
           }
-        })
+        });
       }
       res.status(200).json(documents);
     }
   });
-})
+});
 
 app.get('/document/:id', function(req, res){
   console.log('id: ', req.params.id);
