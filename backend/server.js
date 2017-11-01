@@ -58,19 +58,6 @@ app.post('/newDocument', function(req, res){
     collaborators: []
   })
 
-app.post('/save', function(req, res){
-  Document.findById(req.body.docId, function(error, result){
-    result.title = req.body.docName;
-    return result.save()
-  })
-  .then(() =>
-    res.status(200).json({"success": true})
-  )
-  .catch((error) =>{
-    res.status(500).json({"success": false, "error": error})
-  });
-});
-
   console.log('req.user: ', req.user);
   console.log('documents: ', req.user.documents);
   console.log('newDoc: ', newDocument);
@@ -94,6 +81,19 @@ app.post('/save', function(req, res){
     }
   })
 })
+
+app.post('/save', function(req, res){
+  Document.findById(req.body.docId, function(error, result){
+    result.title = req.body.docName;
+    return result.save()
+  })
+  .then(() =>
+    res.status(200).json({"success": true})
+  )
+  .catch((error) =>{
+    res.status(500).json({"success": false, "error": error})
+  });
+});
 
 app.get('/documents', function(req, res){
   console.log('documents: ', req.user.documents);
