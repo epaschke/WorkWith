@@ -24,7 +24,7 @@ class Login extends React.Component {
   }
 
   login(){
-    console.log('this.state: ', this.state);
+    //console.log('this.state: ', this.state);
     axios.post('http://localhost:3000/login', {
       username: this.state.username,
       password: this.state.password
@@ -42,7 +42,7 @@ class Login extends React.Component {
   render(){
     return (<div>
         <h2>Login Page</h2>
-        <p>path: {this.props.location.pathname}</p>
+        {/* <p>path: {this.props.location.pathname}</p> */}
         <div className="row">
             <form className="col s12" action="http://localhost:3000/login" method="POST" id="form1">
                     <div className="input-field col s6">

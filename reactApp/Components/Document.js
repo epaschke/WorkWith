@@ -2,6 +2,8 @@ var React = require('react');
 var { Editor, EditorState, RichUtils } = require('draft-js');
 const {styleMap} = require('../styleMap');
 console.log('styleMap: ', styleMap);
+var axios = require('axios');
+
 /* This can check if your electron app can communicate with your backend */
 // fetch('http://localhost:3000')
 // .then(resp => resp.text())
@@ -9,10 +11,37 @@ console.log('styleMap: ', styleMap);
 // .catch(err => {throw err})
 
 class DocContainer extends React.Component {
+  constructor(props){
+    super(props);
+    console.log('props: ', this.props.match);
+    const id = this.props.match.params.docId;
+    this.state = {
+      id: id,
+      loading: true,
+      title: ''
+    }
+  }
+
+  componentWillMount(){
+    axios.get('http://localhost:3000/document/' + this.state.id)
+    .then(function (response) {
+      console.log('doc obj: ', response);
+
+      this.setState({
+        title: response.data.title,
+        id: response.data._id,
+        loading: false
+      })
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   render(){
     return (
             <div>
-                <Static docName="Doc" docId="34344"/>
+                <Static loading={this.state.loading} docId={this.state.id} title={this.state.title}/>
                 <MyEditor/>
             </div>
     );
@@ -24,8 +53,8 @@ class Static extends React.Component {
     return (
             <div style={{display: "flex", justifyContent: 'space-around', alignItems: 'center'}}>
                 <a className="btn-floating btn-large waves-effect waves-light red"><i className="material-icons">keyboard_return</i></a>
-                <div><h3><b>{this.props.docName}</b></h3>
-                <p>ID: {this.props.docId}</p></div>
+                <div><h3>{!this.props.loading && <b>{this.props.title}</b>}</h3>
+                <p>ID: {this.props.id}</p></div>
                 <a className="btn-floating btn-large waves-effect waves-light blue"><i className="material-icons">save</i></a>
             </div>
     );

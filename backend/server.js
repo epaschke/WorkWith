@@ -3,11 +3,28 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
+const Document = require('../models/document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_URI);
+
+app.use(express.static("public"));
+app.use(session({ secret: "cats and dogs" }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
+});
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
@@ -20,22 +37,6 @@ passport.use(new LocalStrategy(
   }
 ));
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
-});
-
-app.use(express.static("public"));
-app.use(session({ secret: "cats and dogs" }));
-app.use(bodyParser.json());
-app.use(passport.initialize());
-app.use(passport.session());
-
 // Example route
 app.get('/', function (req, res) {
   console.log('get /');
@@ -46,32 +47,77 @@ app.get('/home', function(req, res){
   res.status(200).send({"success": true});
 });
 
-app.get('login', function(req, res){
+app.get('/login', function(req, res) {
   res.status(400).json({"success": false, "error": "Invalid username or password"});
 })
 
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/home',
-  failureRedirect: '/login',
-  failureFlash: 'Invalid username or password.' })
-);
+app.post('/login', passport.authenticate('local'), function (req, res) {
+  if (!req.user) {
+    res.status(400).json({"success": false, "error": "Invalid username or password"});
+  } else {
+    res.status(200).send({"success": true});
+  }
+});
 
-app.post('/register', function(req, res){
-    console.log('posting to register', req.body)
-  var newUser = new User({
-    username: req.body.username,
-    password: req.body.password
-  });
-  newUser.save(function(error){
-    if (error){
-        console.log('error: ', error)
-      res.status(500).json({"success": false, "error": "Error saving"});
+app.post('/newDocument', function(req, res){
+  var newDocument = new Document({
+    author: req.user,
+    title: req.body.title,
+    collaborators: []
+  })
+  newDocument.save(function(error, nd){
+    if(error){
+      console.log('error: ', error);
+      res.status(500).json({"success": false, "error": "Error saving document"});
     } else {
-      res.status(200).send({"success": true});
+      res.status(200).send({"success": true, doc: nd});
+    }
+  })
+})
+
+app.get('/documents', function(req, res){
+  Document.find({}, function(err, documents){
+    if(err){
+      console.log('error: ', err);
+      res.status(500).json({"success": false, "error": "Error finding documents"});
+    }  else {
+      res.status(200).json(documents);
     }
   });
+})
 
+app.get('/document/:id', function(req, res){
+  Document.findById(req.params.id, function(err, doc){
+    if(err){
+      console.log('document not found!');
+      res.status(500).json({"success": false, "error": "Error finding document"});
+    }  else {
+      res.status(200).json(doc);
+    }
+  })
 });
+
+app.post('/register', function(req, res){
+  User.find({username: req.body.username}, function(err, user){
+    if(!user){
+      var newUser = new User({
+        username: req.body.username,
+        password: req.body.password
+      });
+      newUser.save(function(error){
+        if (error){
+          console.log('error: ', error)
+          res.status(500).json({"success": false, "error": "Error saving user"});
+        } else {
+          res.status(200).send({"success": true});
+        }
+      });
+    }  else {
+      res.status(400).json({"success": false, "error": "User with that name already exists."});
+    }
+  })
+});
+
 
 app.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!');

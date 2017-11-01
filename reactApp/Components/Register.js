@@ -42,7 +42,6 @@ class Register extends React.Component {
   render(){
     return (<div>
         <h2>Register Page</h2>
-        <p>path: {this.props.location.pathname}</p>
         <div className="row">
             <form className="col s12">
                     <div className="input-field col s6">
