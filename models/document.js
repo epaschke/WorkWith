@@ -13,7 +13,8 @@ const DocumentSchema = new Schema({
   },
   collaborators: {
     type: Array
-  },
+  }
 });
+
 
 module.exports = mongoose.model('Document', DocumentSchema);

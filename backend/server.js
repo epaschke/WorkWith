@@ -3,7 +3,7 @@ const app = express();
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-const Document = require('../models/document');
+const Document = require('../models/Document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
@@ -57,6 +57,19 @@ app.post('/newDocument', function(req, res){
     title: req.body.title,
     collaborators: []
   })
+
+app.post('/save', function(req, res){
+  Document.findById(req.body.docId, function(error, result){
+    result.title = req.body.docName;
+    return result.save()
+  })
+  .then(() =>
+    res.status(200).json({"success": true})
+  )
+  .catch((error) =>{
+    res.status(500).json({"success": false, "error": error})
+  });
+});
 
   console.log('req.user: ', req.user);
   console.log('documents: ', req.user.documents);
