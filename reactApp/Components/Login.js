@@ -1,6 +1,5 @@
 var React = require('react');
 var { Link } = require('react-router-dom');
-var axios = require('axios');
 
 class Login extends React.Component {
   constructor(props){

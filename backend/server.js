@@ -61,10 +61,25 @@ app.post('/login', passport.authenticate('local'), function (req, res) {
 
 app.post('/newDocument', function(req, res){
   var newDocument = new Document({
-    author: req.user,
+    author: req.user._id,
     title: req.body.title,
     collaborators: []
   })
+
+  console.log('req.user: ', req.user);
+  console.log('documents: ', req.user.documents);
+  console.log('newDoc: ', newDocument);
+  req.user.documents.push(newDocument);
+  console.log('documents: ', req.user.documents);
+  console.log('req.user: ', req.user);
+  req.user.save(function(err){
+    if(err){
+      console.log('error saving req.user.');
+    }  else{
+      console.log('saved user.');
+    }
+  });
+
   newDocument.save(function(error, nd){
     if(error){
       console.log('error: ', error);
@@ -76,11 +91,19 @@ app.post('/newDocument', function(req, res){
 })
 
 app.get('/documents', function(req, res){
-  Document.find({}, function(err, documents){
+  console.log('documents: ', req.user.documents);
+  Document.find({}).
+  populate('author').
+  exec(function(err, documents){
     if(err){
       console.log('error: ', err);
       res.status(500).json({"success": false, "error": "Error finding documents"});
-    }  else {
+    }  else{
+      documents = documents.filter(function(document){
+        if(document.author.username === req.user.username || (document.collaborators.indexOf(req.user) > -1)){
+          return document;
+        }
+      })
       res.status(200).json(documents);
     }
   });

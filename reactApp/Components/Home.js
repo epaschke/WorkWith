@@ -38,6 +38,7 @@ class Home extends React.Component {
     // axios request
     axios.get('http://localhost:3000/documents')
     .then(function (response) {
+      console.log('response: ', response);
       this.setState({
         documents: response.data
       })
