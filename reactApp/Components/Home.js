@@ -28,7 +28,7 @@ class Home extends React.Component {
 
   findDoc(e){
     e.preventDefault();
-    axios.get(`http://localhost:3000/document/${this.state.id}`)
+    axios.get(`http://localhost:3000/finddocument/${this.state.id}`)
     .then(function (response) {
       console.log('got response: ', response.data)
       this.setState({
@@ -106,7 +106,7 @@ class Home extends React.Component {
     <div className="row">
       <form className="col s12">
         <div className="input-field col s6" style={{border: '1px solid black', display: 'flex', alignItems: 'center'}}>
-          <input placeholder="Enter id.." name="docName" type="text" className="validate" onChange={(e) => this.idChange(e)} value={this.state.id}/>
+          <input placeholder="Enter id.." name="findName" type="text" className="validate" onChange={(e) => this.idChange(e)} value={this.state.id}/>
           <button className="btn-small waves-effect waves-light blue" type="submit" name="action" onClick={(e) => this.findDoc(e)}>Find
             <i className="material-icons right">send</i>
           </button>

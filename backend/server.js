@@ -97,7 +97,6 @@ app.post('/save', function(req, res){
 });
 
 app.get('/documents', function(req, res){
-
   Document.find({}).
   populate('author').
   exec(function(err, documents){
@@ -122,7 +121,7 @@ app.get('/documents', function(req, res){
   });
 });
 
-app.get('/document/:id', function(req, res){
+app.get('/finddocument/:id', function(req, res){
   console.log('id: ', req.params.id);
   Document.findById(req.params.id, function(err, doc){
     if(err || !doc){
@@ -137,6 +136,15 @@ app.get('/document/:id', function(req, res){
           res.status(200).json(doc);
         }
       })
+    }
+  })
+})
+
+app.get('/document/:id', function(req, res){
+  console.log('id: ', req.params.id);
+  Document.findById(req.params.id, function(err, doc){
+    if(doc){
+      res.status(200).json(doc);
     }
   })
 });
