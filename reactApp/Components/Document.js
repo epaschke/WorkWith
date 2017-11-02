@@ -97,7 +97,7 @@ class MyEditor extends React.Component {
     var colorArr = color.split('');
     colorArr[0] = colorArr[0].toUpperCase();
     color = colorArr.join('');
-    this._onToggleInline(`text${color}`).bind(this);
+    this._onToggleInline(`text${color}`);
   }
 
   _onBackgroundColorSelect(){
@@ -105,26 +105,7 @@ class MyEditor extends React.Component {
     var colorArr = color.split('');
     colorArr[0] = colorArr[0].toUpperCase();
     color = colorArr.join('');
-    this._onToggleInline(`background${color}`).bind(this);
-  }
-
-  _onFontStyleSelect(){
-    var font = document.getElementById('fontStyleSelect').value;
-    console.log('font: ', font);
-    switch (font) {
-      case 'monospace':
-        this._onMonospace();
-        break;
-      case 'times new roman':
-        this._onTimes();
-        break;
-      case 'cambria':
-        this._onMonospace();
-        break;
-      default:
-        break;
-
-    }
+    this._onToggleInline(`background${color}`);
   }
 
   _onToggleInline(type){
@@ -176,7 +157,7 @@ class MyEditor extends React.Component {
                       Size: {this.state.size}
                     </div>
                   </div>
-                 <select id='fontStyleSelect' className='dropdown-button btn' href='#' style={{margin: 5}} onChange={this._onFontStyleSelect.bind(this)}>
+                 <select id='fontStyleSelect' className='dropdown-button btn' href='#' style={{margin: 5}} onChange={this._onFont.bind(this)}>
                    <option>-font-</option>
                    <option value="cambria">Cambria</option>
                    <option value="monospace">Monospace</option>
