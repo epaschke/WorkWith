@@ -9,9 +9,6 @@ const UserSchema = new Schema({
   password: {
     required: true,
     type: String
-  },
-  documents: {
-    type: Array
   }
 });
 

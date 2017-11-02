@@ -69,7 +69,7 @@ class Home extends React.Component {
         console.log('Error', error);
     });
   }
-  
+
   render(){
     return (<div style={{padding:20}}>
       <div className="row">

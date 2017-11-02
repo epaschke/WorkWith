@@ -63,7 +63,6 @@ app.post('/newDocument', function(req, res){
       console.log('error: ', error);
       res.status(500).json({"success": false, "error": "Error saving document"});
     } else {
-      req.user.documents.push(nd);
       req.user.save(function(err){
         if(err){
           console.log('error saving req.user.');
