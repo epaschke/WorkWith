@@ -32,7 +32,7 @@ class DocContainer extends React.Component {
       console.log('got response: ', response.data);
       this.setState({
         title: response.data.title,
-        editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(response.data.editorRaw))),
+        editorState: response.data.editorRaw ? EditorState.createWithContent(convertFromRaw(JSON.parse(response.data.editorRaw))) : this.state.editorState,
         loading: false
       });
     }.bind(this))
@@ -40,7 +40,7 @@ class DocContainer extends React.Component {
       console.log(error);
     });
   }
-  
+
   save(){
     console.log('converttoraw:', convertToRaw(this.state.editorState.getCurrentContent()));
     console.log('editorState state: ', this.state.editorState);
