@@ -81,7 +81,7 @@ class DocContainer extends React.Component {
             </div>
     );
   }
-}
+ }
 
 class Static extends React.Component {
   render(){
