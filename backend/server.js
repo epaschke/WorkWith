@@ -128,7 +128,7 @@ app.get('/finddocument/:id', function(req, res){
       console.log('document not found!');
       res.status(500).json({"success": false, "error": "Error finding document"});
     }  else {
-      doc.collaborators.push(req.user);
+      doc.collaborators.push(req.user._id);
       doc.save(function(err){
         if(err){
           console.log('error saving doc.');

@@ -11,9 +11,10 @@ const DocumentSchema = new Schema({
     required: true,
     type: String
   },
-  collaborators: {
-    type: Array
-  },
+  collaborators: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
   editorRaw: {
     type: String
   }
