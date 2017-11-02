@@ -191,7 +191,7 @@ io.on('connection', function(socket){
     }  else if(!socket.room){
       return socket.emit('errorMessage', 'No room!');
     }  else{
-      io.to(socket.room).emit(contentStr);
+      socket.to(socket.room).emit('changestate', contentStr);
     }
   })
 })
