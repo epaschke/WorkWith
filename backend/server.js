@@ -7,6 +7,9 @@ const Document = require('../models/document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
+const server            = require('http').Server(app);
+const io                = require('socket.io')(server);
+
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -15,6 +18,27 @@ app.use(session({ secret: "cats and dogs" }));
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
+
+io.on('connection', function(socket){
+  console.log('connected in server.');
+
+//   socket.on('join', id => {
+//   if (!id) {
+//     return socket.emit('errorMessage', 'No document!');
+//   }
+//   if (socket.room) {
+//     socket.leave(socket.room);
+//   }
+//   socket.room = id;
+//   socket.join(id, () => {
+//     socket.to(id).emit('message', {
+//       username: 'System',
+//       content: `User has joined`
+//     });
+//   });
+// });
+
+})
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -171,6 +195,6 @@ app.post('/register', function(req, res){
 });
 
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!');
 });

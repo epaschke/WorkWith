@@ -9,8 +9,30 @@ class Home extends React.Component {
       title: '',
       documents: [],
       id: '',
+      socket: io()
     }
   }
+
+  componentWillMount(){
+    // axios request
+    axios.get('http://localhost:3000/documents')
+    .then(function (response) {
+      this.setState({
+        documents: response.data
+      })
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  componentDidMount(){
+    this.state.socket.on('connection', () => {
+      console.log('connected!');
+    })
+  }
+
+
 
   docChange(e){
     console.log('docName', e.target.value);
@@ -54,19 +76,6 @@ class Home extends React.Component {
     })
     .catch(function(error){
         console.log('Error', error);
-    });
-  }
-
-  componentWillMount(){
-    // axios request
-    axios.get('http://localhost:3000/documents')
-    .then(function (response) {
-      this.setState({
-        documents: response.data
-      })
-    }.bind(this))
-    .catch(function (error) {
-      console.log(error);
     });
   }
 
