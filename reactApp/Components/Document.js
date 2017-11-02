@@ -22,8 +22,12 @@ class DocContainer extends React.Component {
       title: '',
       editorState: EditorState.createEmpty(),
       socket: io.connect('http://localhost:3000', { transports: ['websocket'] }),
-    }
-    this.onChange = (editorState) => this.setState({editorState});
+    };
+    this.onChange = (editorState) => {
+      this.state.socket.emit('typing', JSON.stringify(convertToRaw(editorState.getCurrentContent())));
+      console.log('emitted typing event');
+      this.setState({editorState});
+    };
   }
 
   componentWillMount(){
@@ -46,6 +50,11 @@ class DocContainer extends React.Component {
     this.state.socket.on('connect', () => {
       console.log('connected');
       this.state.socket.emit('join', this.state.id);
+    })
+    this.state.socket.on('changestate', function(newState){
+      this.setState({
+        editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(newState)))
+      })
     })
   }
 
