@@ -184,6 +184,16 @@ io.on('connection', function(socket){
       console.log('joined the room!');
     });
   })
+
+  socket.on('typing', function(contentStr){
+    if(!contentStr){
+      return socket.emit('errorMessage', 'No content!');
+    }  else if(!socket.room){
+      return socket.emit('errorMessage', 'No room!');
+    }  else{
+      io.to(socket.room).emit(contentStr);
+    }
+  })
 })
 
 server.listen(3000, function () {

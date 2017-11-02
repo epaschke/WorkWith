@@ -45,9 +45,8 @@ class DocContainer extends React.Component {
   componentDidMount(){
     this.state.socket.on('connect', () => {
       console.log('connected');
+      this.state.socket.emit('join', this.state.id);
     })
-
-    this.state.socket.emit('join', this.state.id);
   }
 
   save(){
