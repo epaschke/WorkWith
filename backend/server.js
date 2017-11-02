@@ -18,27 +18,6 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-io.on('connection', function(socket){
-  console.log('connected in server.');
-
-//   socket.on('join', id => {
-//   if (!id) {
-//     return socket.emit('errorMessage', 'No document!');
-//   }
-//   if (socket.room) {
-//     socket.leave(socket.room);
-//   }
-//   socket.room = id;
-//   socket.join(id, () => {
-//     socket.to(id).emit('message', {
-//       username: 'System',
-//       content: `User has joined`
-//     });
-//   });
-// });
-
-})
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -132,7 +111,7 @@ app.get('/documents', function(req, res){
       } else {
         documents = documents.filter(function(document){
           if(document.author.username === req.user.username || (document.collaborators.indexOf(req.user) > -1)){
-            console.log(document);
+            //console.log(document);
             return true;
           } else {
             return false;
@@ -145,7 +124,7 @@ app.get('/documents', function(req, res){
 });
 
 app.get('/finddocument/:id', function(req, res){
-  console.log('id: ', req.params.id);
+  //console.log('id: ', req.params.id);
   Document.findById(req.params.id, function(err, doc){
     if(err || !doc){
       console.log('document not found!');
@@ -164,7 +143,7 @@ app.get('/finddocument/:id', function(req, res){
 })
 
 app.get('/document/:id', function(req, res){
-  console.log('id: ', req.params.id);
+  //console.log('id: ', req.params.id);
   Document.findById(req.params.id, function(err, doc){
     if(doc){
       res.status(200).json(doc);
@@ -195,6 +174,16 @@ app.post('/register', function(req, res){
 
 io.on('connection', function(socket){
   console.log('connection made')
+  socket.on('join', function(id){
+    if(socket.room){
+      socket.leave(socket.room);
+    }
+
+    socket.room = id;
+    socket.join(id, function(){
+      console.log('joined the room!');
+    });
+  })
 })
 
 server.listen(3000, function () {

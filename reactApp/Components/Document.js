@@ -20,7 +20,8 @@ class DocContainer extends React.Component {
       id: id,
       loading: true,
       title: '',
-      editorState: EditorState.createEmpty()
+      editorState: EditorState.createEmpty(),
+      socket: io.connect('http://localhost:3000', { transports: ['websocket'] }),
     }
     this.onChange = (editorState) => this.setState({editorState});
   }
@@ -39,6 +40,14 @@ class DocContainer extends React.Component {
     .catch(function (error) {
       console.log(error);
     });
+  }
+
+  componentDidMount(){
+    this.state.socket.on('connect', () => {
+      console.log('connected');
+    })
+
+    this.state.socket.emit('join', this.state.id);
   }
 
   save(){
