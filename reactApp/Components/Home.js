@@ -9,14 +9,20 @@ class Home extends React.Component {
       title: '',
       documents: [],
       id: '',
-      socket: io.connect('http://localhost:3000', { transports: ['websocket'] })
     }
   }
 
-  componentDidMount(){
-    this.state.socket.on('connect', () => {
-      console.log('connected');
-    })
+  componentWillMount(){
+    // axios request
+    axios.get('http://localhost:3000/documents')
+    .then(function (response) {
+      this.setState({
+        documents: response.data
+      })
+    }.bind(this))
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   docChange(e){
@@ -37,7 +43,7 @@ class Home extends React.Component {
     e.preventDefault();
     axios.get(`http://localhost:3000/finddocument/${this.state.id}`)
     .then(function (response) {
-      console.log('got response: ', response.data)
+      //console.log('got response: ', response.data)
       this.setState({
         documents: [...this.state.documents, response.data],
         id: ''
@@ -63,20 +69,7 @@ class Home extends React.Component {
         console.log('Error', error);
     });
   }
-
-  componentWillMount(){
-    // axios request
-    axios.get('http://localhost:3000/documents')
-    .then(function (response) {
-      this.setState({
-        documents: response.data
-      })
-    }.bind(this))
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
+  
   render(){
     return (<div style={{padding:20}}>
       <div className="row">
