@@ -110,7 +110,7 @@ app.get('/documents', function(req, res){
         documents = [];
       } else {
         documents = documents.filter(function(document){
-          if(document.author.username === req.user.username || (document.collaborators.indexOf(req.user) > -1)){
+          if(document.author.username === req.user.username || (document.collaborators.indexOf(req.user._id) > -1)){
             //console.log(document);
             return true;
           } else {
@@ -187,10 +187,13 @@ io.on('connection', function(socket){
 
   socket.on('typing', function(contentStr){
     if(!contentStr){
+      console.log('nothing passed to typing.');
       return socket.emit('errorMessage', 'No content!');
     }  else if(!socket.room){
+      console.log('not in a room.');
       return socket.emit('errorMessage', 'No room!');
     }  else{
+      console.log('sending it back.');
       socket.to(socket.room).emit('changestate', contentStr);
     }
   })

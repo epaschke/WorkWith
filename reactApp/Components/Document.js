@@ -51,7 +51,7 @@ class DocContainer extends React.Component {
       console.log('connected');
       this.state.socket.emit('join', this.state.id);
     })
-    this.state.socket.on('changestate', function(newState){
+    this.state.socket.on('changestate', (newState) => {
       this.setState({
         editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(newState)))
       })
