@@ -188,7 +188,7 @@ class MyEditor extends React.Component {
                  <a className="waves-effect waves-teal btn-flat" onClick={() => this._onToggleBlock('centerAlign')}><i className="material-icons">format_align_center</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={() => this._onToggleBlock('rightAlign')}><i className="material-icons">format_align_right</i></a>
                  <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={() => this._onToggleBlock('unordered-list-item')}>format_list_bulleted</i></a>
-                 <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={() => this._onToggleInline('ordered-list-item')}>format_list_numbered</i></a>
+                 <a className="waves-effect waves-teal btn-flat"><i className="material-icons" onClick={() => this._onToggleBlock('ordered-list-item')}>format_list_numbered</i></a>
                  <a className="waves-effect waves-teal btn-flat" onClick={() => this._onToggleInline('STRIKETHROUGH')}><i className="material-icons">format_strikethrough</i></a>
              </div>
          </div>

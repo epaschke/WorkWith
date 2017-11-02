@@ -9,7 +9,14 @@ class Home extends React.Component {
       title: '',
       documents: [],
       id: '',
+      socket: io.connect('http://localhost:3000', { transports: ['websocket'] })
     }
+  }
+
+  componentDidMount(){
+    this.state.socket.on('connect', () => {
+      console.log('connected');
+    })
   }
 
   docChange(e){
@@ -96,11 +103,10 @@ class Home extends React.Component {
         Los documentos
       </div>
     <ul>
-      {this.state.documents.map((doc) => {
-        return <li key={doc._id}>
+      {this.state.documents.map((doc) => (<li key={doc._id}>
           <Link to={{pathname: `/document/${doc._id}`}}>{doc.title} </Link>
-        </li>
-      })}
+        </li>)
+      )}
     </ul>
     </div>
     <div className="row">

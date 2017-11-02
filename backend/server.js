@@ -7,6 +7,8 @@ const Document = require('../models/document');
 var session = require("express-session");
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
+const server  = require('http').Server(app);
+const io = require('socket.io')(server);
 
 mongoose.connect(process.env.MONGODB_URI);
 
@@ -170,7 +172,10 @@ app.post('/register', function(req, res){
   })
 });
 
+io.on('connection', function(socket){
+  console.log('connection made')
+})
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('Backend server for Electron App running on port 3000!');
 });
