@@ -177,11 +177,30 @@ io.on('connection', function(socket){
     if(socket.room){
       socket.leave(socket.room);
     }
-
     socket.room = id;
     socket.join(id, function(){
       console.log('joined the room!');
     });
+    console.log('room: ', socket.room);
+
+    let room = io.sockets.adapter.rooms[id];
+
+    if(room.length === 1){
+      io.sockets.adapter.rooms[id].colors = ['red', 'blue', 'green', 'orange', 'yellow'];
+    }
+
+    socket.color = io.sockets.adapter.rooms[id].colors.pop();
+
+    console.log('room: ', room);
+
+  })
+
+  socket.on('leave', function(){
+    console.log('leaving. color: ', socket.color);
+    io.sockets.adapter.rooms[socket.room].colors.push(socket.color);
+    console.log('room colors: ', io.sockets.adapter.rooms[socket.room].colors);
+    socket.color = '';
+    socket.leave(socket.room);
   })
 
   socket.on('typing', function(contentStr){
@@ -195,6 +214,11 @@ io.on('connection', function(socket){
       console.log('sending it back.');
       socket.to(socket.room).emit('changestate', contentStr);
     }
+  })
+
+  socket.on('selection', function(obj){
+    obj["color"] = socket.color;
+    socket.to(socket.room).emit('aftercolor', obj);
   })
 })
 

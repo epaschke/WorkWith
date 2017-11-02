@@ -5,12 +5,6 @@ const { styleMap } = require('../styleMap');
 console.log('styleMap: ', styleMap);
 var axios = require('axios');
 
-/* This can check if your electron app can communicate with your backend */
-// fetch('http://localhost:3000')
-// .then(resp => resp.text())
-// .then(text => console.log(text))
-// .catch(err => {throw err})
-
 class DocContainer extends React.Component {
   constructor(props){
     super(props);
@@ -86,21 +80,25 @@ class DocContainer extends React.Component {
       console.log(error);
     })
   }
+
+  leaveDoc(){
+    this.state.socket.emit('leave');
+  }
   render(){
     return (
             <div>
-                <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} saveFn={this.save.bind(this)} />
+                <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
                 <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn}/>
             </div>
     );
   }
-}
+ }
 
 class Static extends React.Component {
   render(){
     return (
             <div style={{display: "flex", justifyContent: 'space-around', alignItems: 'center'}}>
-                <Link to="/home" className="btn-floating btn-large waves-effect waves-light red">
+                <Link onClick={this.props.leaveDoc} to="/home" className="btn-floating btn-large waves-effect waves-light red">
                   <i className="material-icons">keyboard_return</i>
                 </Link>
                 <div><h3>{!this.props.loading && <b>{this.props.title}</b>}</h3>
