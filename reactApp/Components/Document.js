@@ -1,5 +1,5 @@
 var React = require('react');
-var { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw } = require('draft-js');
+var { Editor, EditorState, RichUtils, convertFromRaw, convertToRaw, SelectionState } = require('draft-js');
 var { Link } = require('react-router-dom');
 const { styleMap } = require('../styleMap');
 console.log('styleMap: ', styleMap);
@@ -17,11 +17,22 @@ class DocContainer extends React.Component {
       editorState: EditorState.createEmpty(),
       socket: io.connect('http://localhost:3000', { transports: ['websocket'] }),
     };
+
     this.onChange = (editorState) => {
       this.state.socket.emit('typing', JSON.stringify(convertToRaw(editorState.getCurrentContent())));
-      console.log('emitted typing event');
+      this.state.socket.emit('selection', {
+        anchor: editorState.getSelection().anchorOffset,
+        focus: editorState.getSelection().focusOffset
+      });
       this.setState({editorState});
+
     };
+  }
+
+  setStateFn(toSet){
+    this.setState({
+      editorState: toSet
+    })
   }
 
   componentWillMount(){
@@ -44,12 +55,12 @@ class DocContainer extends React.Component {
     this.state.socket.on('connect', () => {
       console.log('connected');
       this.state.socket.emit('join', this.state.id);
-    })
+    });
     this.state.socket.on('changestate', (newState) => {
       this.setState({
         editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(newState)))
-      })
-    })
+      });
+    });
   }
 
   save(){
@@ -77,7 +88,7 @@ class DocContainer extends React.Component {
     return (
             <div>
                 <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
-                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} />
+                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn}/>
             </div>
     );
   }
@@ -104,7 +115,21 @@ class Static extends React.Component {
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {size: 12};
+    this.state = {size: 12, currentSelection: props.editorState.getSelectionState()};
+  }
+
+  componentDidMount(){
+    this.state.socket.on('aftercolor', (obj) => {
+      const selectionState = SelectionState.createEmpty();
+      selectionState.merge({
+          anchorOffset: obj.anchor,
+          focusOffset: obj.focus
+        });
+      const originalSelection = this.state.currentSelection;
+      this.props.setStateFn(EditorState.forceSelection(this.props.editorState, selectionState))
+      this.props.onChange(RichUtils.toggleInlineStyle(this.props.editorState, `background${obj.color}`))
+      this.props.setStateFn(EditorState.forceSelection(this.props.editorState, originalSelection))
+    });
   }
 
   _onColorSelect(){
