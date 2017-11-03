@@ -88,7 +88,7 @@ class DocContainer extends React.Component {
     return (
             <div>
                 <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
-                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn}/>
+                <MyEditor socket={this.state.socket} editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn}/>
             </div>
     );
   }
@@ -115,7 +115,7 @@ class Static extends React.Component {
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {size: 12, currentSelection: props.editorState.getSelectionState()};
+    this.state = {size: 12, currentSelection: props.editorState.getSelection(), socket: props.socket};
   }
 
   componentDidMount(){
