@@ -112,7 +112,7 @@ class Static extends React.Component {
   }
 }
 
-class MyEditor extends React.Component {
+class MyEditor extends React.Component { 
   constructor(props) {
     super(props);
     this.state = {size: 12, currentSelection: props.editorState.getSelection(), socket: props.socket};
