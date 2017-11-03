@@ -21,8 +21,11 @@ class DocContainer extends React.Component {
     this.onChange = (editorState) => {
       this.state.socket.emit('typing', JSON.stringify(convertToRaw(editorState.getCurrentContent())));
       this.state.socket.emit('selection', {
-        anchor: editorState.getSelection().anchorOffset,
-        focus: editorState.getSelection().focusOffset
+        anchorOffset: editorState.getSelection().getAnchorOffset(),
+        focusOffset: editorState.getSelection().getFocusOffset(),
+        anchorKey: editorState.getSelection().getAnchorKey(),
+        focusKey: editorState.getSelection().getFocusKey(),
+        isCollapsed: editorState.getSelection().isCollapsed()
       });
       this.setState({editorState});
 
@@ -88,7 +91,7 @@ class DocContainer extends React.Component {
     return (
             <div>
                 <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
-                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn}/>
+                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn.bind(this)}/>
             </div>
     );
   }
@@ -115,20 +118,28 @@ class Static extends React.Component {
 class MyEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {size: 12, currentSelection: props.editorState.getSelectionState()};
+    this.state = {size: 12};
   }
 
   componentDidMount(){
-    this.state.socket.on('aftercolor', (obj) => {
-      const selectionState = SelectionState.createEmpty();
-      selectionState.merge({
-          anchorOffset: obj.anchor,
-          focusOffset: obj.focus
-        });
-      const originalSelection = this.state.currentSelection;
-      this.props.setStateFn(EditorState.forceSelection(this.props.editorState, selectionState))
-      this.props.onChange(RichUtils.toggleInlineStyle(this.props.editorState, `background${obj.color}`))
-      this.props.setStateFn(EditorState.forceSelection(this.props.editorState, originalSelection))
+    this.props.socket.on('aftercolor', (obj) => {
+      // THIS DOES NOT WORK DUE TO FORCING MOVEMENT
+      // console.log('recieved event: ', obj)
+      // var selectionState = SelectionState.createEmpty();
+      // console.log(selectionState);
+      // selectionState = selectionState.merge({
+      //     anchorOffset: obj.anchorOffset,
+      //     focusOffset: obj.focusOffset,
+      //     focusKey: obj.focusKey,
+      //     anchorKey: obj.anchorKey
+      //   });
+      //   console.log(selectionState);
+      // const originalSelection = this.props.editorState.getSelection();
+      // this.props.setStateFn(EditorState.forceSelection(this.props.editorState, selectionState))
+      // this.props.onChangeFn(RichUtils.toggleInlineStyle(this.props.editorState, `background${obj.color}`))
+      // console.log(selectionState);
+      // console.log(this.props.editorState)
+      // this.props.setStateFn(EditorState.forceSelection(this.props.editorState, originalSelection))
     });
   }
 
