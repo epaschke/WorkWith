@@ -31,7 +31,7 @@ class RevisionHistory extends React.Component {
       console.log('error: ', error);
     });
   }
-
+   
   selectDoc(doc){
     this.setState({
       selectedText: EditorState.createWithContent(convertFromRaw(JSON.parse(doc.editorState))).getCurrentContent().getPlainText(),
