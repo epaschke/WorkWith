@@ -75,6 +75,25 @@ app.post('/newDocument', function(req, res){
   })
 })
 
+app.post('/update/:id', function(req, res){
+  Document.findById(req.body.docId, function(error, result){
+    if (error || !result){
+      res.status(500).json({"success": false, "error": error});
+    }  else {
+      result.editorRaw = req.body.editorState;
+      result.save(function(error, result2){
+        if (error){
+          console.log('error saving: ', error);
+          res.status(500).json({"success": false, "error": error});
+        } else {
+          console.log('post-save: ', result2);
+          res.status(200).json({"success": true});
+        }
+      });
+    }
+  })
+})
+
 app.post('/save', function(req, res){
   //console.log('save req:', req.body);
   Document.findById(req.body.docId, function(error, result){
@@ -83,6 +102,11 @@ app.post('/save', function(req, res){
     } else {
       //console.log('result found save:', result);
       result.title = req.body.title;
+      result.history.push({
+        editorState: req.body.editorState,
+        date: new Date(Date.now())
+      });
+
       result.editorRaw = req.body.editorState;
       result.save(function(error, result2){
         if (error){

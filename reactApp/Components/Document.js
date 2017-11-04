@@ -89,8 +89,7 @@ class DocContainer extends React.Component {
     return (
             <div>
                 <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
-                <MyEditor currentSelection={this.state.currentSelection} editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn.bind(this)}/>
-            </div>
+                <MyEditor docId={this.state.id} currentSelection={this.state.currentSelection} editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn.bind(this)}/>            </div>
     );
   }
  }
@@ -274,6 +273,7 @@ class MyEditor extends React.Component {
                  <a className="waves-effect waves-teal btn-flat" onClick={() => this._onToggleInline('STRIKETHROUGH')}><i className="material-icons">format_strikethrough</i></a>
              </div>
          </div>
+
          {this.state.display ?
            <div style={{
              zIndex: -1,
@@ -293,6 +293,9 @@ class MyEditor extends React.Component {
                 handleKeyCommand={this.handleKeyCommand}
                 onChange={this.props.onChangeFn}/>
           </div>
+          <div style={{display: "flex", alignItems: 'center'}}>
+              <Link className="btn-flat blue" to={`/history/${this.props.docId}`}> View History</Link>
+            </div>
         </div>
     );
   }

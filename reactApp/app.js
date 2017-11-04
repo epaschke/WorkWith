@@ -4,6 +4,7 @@ var { DocContainer } = require('./Components/Document');
 var { Home } = require('./Components/Home');
 var { Login } = require('./Components/Login');
 var { Register }= require('./Components/Register');
+var { RevisionHistory }= require('./Components/RevisionHistory');
 var { BrowserRouter, Switch, Route, Link } = require('react-router-dom');
 
 class App extends React.Component {
@@ -17,6 +18,7 @@ class App extends React.Component {
                     <Route path="/login" component={Login} />
                     <Route path="/home" component={Home} />
                     <Route path="/document/:docId" component={DocContainer} />
+                    <Route path="/history/:docId" component={RevisionHistory} />
                 </Switch>
             </div>
         </BrowserRouter>

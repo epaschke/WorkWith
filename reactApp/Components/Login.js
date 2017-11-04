@@ -1,5 +1,5 @@
 var React = require('react');
-var { Link } = require('react-router-dom');
+var { Link, BrowserRouter } = require('react-router-dom');
 var axios = require('axios');
 class Login extends React.Component {
   constructor(props){
@@ -31,6 +31,7 @@ class Login extends React.Component {
     })
     .then((response) => {
       if (response.data.success){
+        console.log('this.props: ', this.props);
         this.props.history.push('/home');
       }
     })
