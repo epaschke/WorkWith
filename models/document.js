@@ -17,7 +17,8 @@ const DocumentSchema = new Schema({
   }],
   editorRaw: {
     type: String
-  }
+  },
+  history: []
 });
 
 

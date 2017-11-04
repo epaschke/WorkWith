@@ -91,7 +91,7 @@ class DocContainer extends React.Component {
     return (
             <div>
                 <Static loading={this.state.loading} docId={this.state.id} title={this.state.title} leaveDoc={this.leaveDoc.bind(this)} saveFn={this.save.bind(this)} />
-                <MyEditor editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn.bind(this)}/>
+                <MyEditor docId={this.state.id} editorState={this.state.editorState} onChangeFn={this.onChange} socket={this.state.socket} setStateFn={this.setStateFn.bind(this)}/>
             </div>
     );
   }
@@ -245,6 +245,9 @@ class MyEditor extends React.Component {
          </div>
             <div style={{border: "1px solid gray", minHeight: 300, margin: 20}}>
                 <Editor spellCheck={true} blockStyleFn={this.myBlockStyleFn} customStyleMap={styleMap} editorState={this.props.editorState} handleKeyCommand={this.handleKeyCommand} onChange={this.props.onChangeFn}/>
+            </div>
+            <div style={{display: "flex", alignItems: 'center'}}>
+              <Link className="btn-flat blue" to={`/history/${this.props.docId}`}> View History</Link>
             </div>
         </div>
     );
