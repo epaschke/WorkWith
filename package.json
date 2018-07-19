@@ -38,6 +38,7 @@
     "draft-js": "^0.10.4",
     "express": "^4.15.3",
     "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
     "http": "0.0.0",
     "materialize-css": "^0.100.2",
     "mongoose": "^4.12.5",
@@ -48,6 +49,7 @@
     "react-dom": "^15.6.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
-    "socket.io": "^2.0.4"
+    "socket.io": "^2.1.1",
+    "uws": "^10.148.1"
   }
 }

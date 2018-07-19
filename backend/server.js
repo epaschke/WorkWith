@@ -33,7 +33,7 @@ passport.use(new LocalStrategy(
     User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) { return done(null, false); }
-      if (!user.password === password) { return done(null, false); }
+      if (user.password !== password) { return done(null, false); }
       return done(null, user);
     });
   }
@@ -72,8 +72,8 @@ app.post('/newDocument', function(req, res){
         }
       });
     }
-  })
-})
+  });
+});
 
 app.post('/update/:id', function(req, res){
   Document.findById(req.body.docId, function(error, result){

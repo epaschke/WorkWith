@@ -1,14 +1,17 @@
 var React = require('react');
-var { Link, BrowserRouter } = require('react-router-dom');
+var { Link } = require('react-router-dom');
 var axios = require('axios');
+
+
 class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       username: '',
-      password: ''
-        }
-    }
+      password: '',
+      error: ''
+    };
+  }
   passwordChange(e){
     console.log('e password', e.target.value);
     this.setState({
@@ -25,7 +28,7 @@ class Login extends React.Component {
   login(e){
     //console.log('this.state: ', this.state);
     e.preventDefault();
-    axios.post('http://localhost:3000/login', {
+    axios.post('/api/login', {
       username: this.state.username,
       password: this.state.password
     })
@@ -33,6 +36,8 @@ class Login extends React.Component {
       if (response.data.success){
         console.log('this.props: ', this.props);
         this.props.history.push('/home');
+      } else {
+        this.setState({error: "Error logging in."});
       }
     })
     .catch(function(error){
@@ -44,6 +49,7 @@ class Login extends React.Component {
     return (<div>
         <h2>Login Page</h2>
         {/* <p>path: {this.props.location.pathname}</p> */}
+        {<p>{this.state.error}</p>}
         <div className="row">
             <form className="col s12" id="form1">
                     <div className="input-field col s6">
